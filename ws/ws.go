@@ -24,6 +24,7 @@ func (cm *ConnManager) RemoveConn(c *websocket.Conn, idx int) {
 		return
 	}
 	cm.Lock()
+	defer cm.Unlock()
 	if cm.conns[idx] != c {
 		log.Printf("Connection Mismatch, index %d for %s, Total:%d\n",
 			idx, c.RemoteAddr(), len(cm.conns))
@@ -31,7 +32,6 @@ func (cm *ConnManager) RemoveConn(c *websocket.Conn, idx int) {
 	}
 	cm.conns[idx].Close()
 	cm.conns = append(cm.conns[0:idx], cm.conns[idx+1:]...)
-	cm.Unlock()
 }
 func (cm *ConnManager) FindConn(c *websocket.Conn) int {
 	for i, _ := range cm.conns {
