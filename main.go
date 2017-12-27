@@ -31,21 +31,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 func wsHandler(w http.ResponseWriter, r *http.Request) {
 	conn, _ := upgrader.Upgrade(w, r, nil)
-	go CheckStatus(conn)
 	cm.AddConn(conn)
-
-}
-
-func CheckStatus(conn *websocket.Conn) {
-	for {
-		_, _, err := conn.ReadMessage()
-		if err != nil {
-			log.Println("Connection was closed from client")
-			log.Printf("Error: %s\n", err)
-			cm.RemoveConn(conn)
-			return
-		}
-	}
 }
 
 func SendMessages() {

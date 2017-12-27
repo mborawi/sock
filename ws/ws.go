@@ -15,7 +15,19 @@ type ConnManager struct {
 func (cm *ConnManager) AddConn(c *websocket.Conn) {
 	cm.Lock()
 	cm.conns = append(cm.conns, c)
+	go cm.checkStatus(c)
 	cm.Unlock()
+}
+
+func (cm *ConnManager) checkStatus(conn *websocket.Conn) {
+	for {
+		_, _, err := conn.ReadMessage()
+		if err != nil {
+			log.Println(err)
+			cm.RemoveConn(conn)
+			return
+		}
+	}
 }
 
 func (cm *ConnManager) RemoveConn(c *websocket.Conn) {
