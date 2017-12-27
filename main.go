@@ -21,9 +21,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/ws", wsHandler)
-	// r.HandleFunc("/static", http.StripPrefix("static", h))
 	x, _ := os.Getwd()
-	log.Println(x, http.Dir("./static"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	log.Println("Listening on port 7070")
 	go SendMessages()
@@ -61,7 +59,6 @@ func SendMessages() {
 		voteCount := rand.Intn(100)
 		log.Printf("Sending response to a total connection count of %d\n", cm.Size())
 		response := fmt.Sprintf("Votes: %d, Time: %s", voteCount, time.Now().Format("2006-01-02T15:04:05.000Z07:00"))
-		// conn.WriteMessage(websocket.TextMessage, []byte(response))
 		count := cm.Broadcast(websocket.TextMessage, []byte(response))
 		log.Printf("%d connections sent", count)
 	}
