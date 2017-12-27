@@ -15,8 +15,8 @@ type ConnManager struct {
 func (cm *ConnManager) AddConn(c *websocket.Conn) {
 	cm.Lock()
 	cm.conns = append(cm.conns, c)
-	go cm.checkStatus(c)
 	cm.Unlock()
+	go cm.checkStatus(c)
 }
 
 func (cm *ConnManager) checkStatus(conn *websocket.Conn) {
