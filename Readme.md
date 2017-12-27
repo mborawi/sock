@@ -6,3 +6,4 @@
 
 ``` go run main.go```
 
+Launch browser to localhost:7070, open several tabs to same address
