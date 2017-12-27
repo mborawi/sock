@@ -17,7 +17,8 @@ func (cm *ConnManager) AddConn(c *websocket.Conn) {
 	cm.conns = append(cm.conns, c)
 	cm.Unlock()
 }
-func (cm *ConnManager) RemoveConn(c *websocket.Conn, idx int) {
+func (cm *ConnManager) RemoveConn(c *websocket.Conn) {
+	idx := cm.FindConn(c)
 	if idx < 0 {
 		log.Printf("Connection index %d for %s not found, Total:%d\n",
 			idx, c.RemoteAddr(), len(cm.conns))

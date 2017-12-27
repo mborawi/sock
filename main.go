@@ -5,7 +5,6 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -21,7 +20,6 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/ws", wsHandler)
-	x, _ := os.Getwd()
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	log.Println("Listening on port 7070")
 	go SendMessages()
@@ -44,7 +42,7 @@ func CheckStatus(conn *websocket.Conn) {
 		if err != nil {
 			log.Println("Connection was closed from client")
 			log.Printf("Error: %s\n", err)
-			cm.RemoveConn(conn, cm.FindConn(conn))
+			cm.RemoveConn(conn)
 			return
 		}
 	}
