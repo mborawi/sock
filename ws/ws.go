@@ -49,6 +49,9 @@ func (cm *ConnManager) RemoveConn(c *websocket.Conn) {
 }
 
 func (cm *ConnManager) FindConn(c *websocket.Conn) int {
+	cm.Lock()
+	defer cm.Unlock()
+
 	for i, _ := range cm.conns {
 		if c == cm.conns[i] {
 			return i
@@ -58,11 +61,14 @@ func (cm *ConnManager) FindConn(c *websocket.Conn) int {
 }
 
 func (cm *ConnManager) Size() int {
+	cm.Lock()
+	defer cm.Unlock()
 	return len(cm.conns)
 }
 
 func (cm *ConnManager) Broadcast(mType int, content []byte) int {
 	count := 0
+	cm.Lock()
 	for _, c := range cm.conns {
 		if err := c.WriteMessage(mType, content); err != nil {
 			log.Printf("An Error occured when writing to connection\n%s\n", err)
@@ -70,5 +76,6 @@ func (cm *ConnManager) Broadcast(mType int, content []byte) int {
 		}
 		count += 1
 	}
+	cm.Unlock()
 	return count
 }

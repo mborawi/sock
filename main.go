@@ -35,7 +35,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SendMessages() {
-	ch := time.Tick(200 * time.Millisecond)
+	ch := time.Tick(800 * time.Millisecond)
 	for range ch {
 		if cm.Size() < 1 {
 			continue
