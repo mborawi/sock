@@ -23,7 +23,8 @@ func (cm *ConnManager) checkStatus(conn *websocket.Conn) {
 	for {
 		_, _, err := conn.ReadMessage()
 		if err != nil {
-			log.Println(err)
+
+			log.Printf("Connection: %s Closed. Error Message:%s\n", conn.RemoteAddr(), err)
 			cm.RemoveConn(conn)
 			return
 		}
