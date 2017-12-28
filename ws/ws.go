@@ -20,6 +20,7 @@ func (cm *ConnManager) AddConn(c *websocket.Conn) {
 }
 
 func (cm *ConnManager) checkStatus(conn *websocket.Conn) {
+	log.Printf("Connection established with: %s\n", conn.RemoteAddr())
 	for {
 		_, _, err := conn.ReadMessage()
 		if err != nil {
