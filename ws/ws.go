@@ -79,3 +79,17 @@ func (cm *ConnManager) Broadcast(mType int, content []byte) int {
 	cm.Unlock()
 	return count
 }
+
+func (cm *ConnManager) BroadcastJson(v interface{}) int {
+	count := 0
+	cm.Lock()
+	for _, c := range cm.conns {
+		if err := c.WriteJSON(v); err != nil {
+			log.Printf("An Error occured when json writing to connection\n%s\n", err)
+			continue
+		}
+		count += 1
+	}
+	cm.Unlock()
+	return count
+}
